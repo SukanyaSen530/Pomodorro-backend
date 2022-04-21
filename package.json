@@ -1,7 +1,7 @@
 {
   "name": "pomodorrobackend",
   "version": "1.0.0",
-  "description": "MERN app",
+  "description": "Pomodorro App Backend",
   "main": "server.js",
   "type": "module",
   "engines": {
