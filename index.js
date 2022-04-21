@@ -6,6 +6,7 @@ import connectDB from "./config/db.js";
 
 import authRoutes from "./api/auth.js";
 import taskRoutes from "./api/task.js";
+import protectedRoutes from "./middleware/auth.js";
 
 //for accessing the .env file
 dotenv.config();
@@ -19,8 +20,8 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => res.send("Pomodoro Backend!"));
-app.use("/api/auth", authRoutes);
-app.use("/api/tasks", taskRoutes);
+app.use("/auth", authRoutes);
+app.use("/tasks", protectedRoutes, taskRoutes);
 
 
 const PORT = process.env.PORT || 5000;
@@ -30,6 +31,5 @@ const server = app.listen(PORT, (err) => {
   if (err) console.log("Error in server setup");
   console.log(`Server running on ${port}`);
 });
-
 
 export default app;

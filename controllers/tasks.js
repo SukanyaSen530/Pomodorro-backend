@@ -9,7 +9,7 @@ export const getAllTasks = async (req, res) => {
       user: userID,
     });
 
-    return res.status(200).json({ tasks: tasksData });
+    return res.status(200).json({ tasks: tasksData || [] });
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
