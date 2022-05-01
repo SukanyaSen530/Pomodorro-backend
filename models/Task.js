@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import User from "./User.js";
 const { Schema, model } = mongoose;
 
 const TagSchema = mongoose.Schema({
@@ -7,10 +6,9 @@ const TagSchema = mongoose.Schema({
 });
 
 const TaskSchema = new Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
+  userId: {
+    type: String,
     required: [true, "User Id is required!"],
-    ref: User,
     select: false,
   },
   title: {
@@ -33,6 +31,10 @@ const TaskSchema = new Schema({
   shortBreakDuration: {
     type: Number,
     required: [true, "Short break duration is required"],
+  },
+  longBreakDuration: {
+    type: Number,
+    required: [true, "Long break duration is required"],
   },
 });
 

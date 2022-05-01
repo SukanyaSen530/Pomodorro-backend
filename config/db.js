@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+//for accessing the .env file
+dotenv.config();
 
 const { connect } = mongoose;
 
