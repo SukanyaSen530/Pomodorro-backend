@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Task from "../models/Task.js";
 
 export const getAllTasks = async (req, res) => {
-  const userID = req.user.googleId;
+  const userID = req.user._id;
 
   try {
     const tasksData = await Task.find({
@@ -27,7 +27,7 @@ export const getATask = async (req, res) => {
 };
 
 export const createTask = async (req, res) => {
-  const userID = req.user.googleId;
+  const userID = req.user._id;
 
   const newTask = new Task({
     user: userID,

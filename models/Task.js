@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import User from "./User.js";
 const { Schema, model } = mongoose;
 
 const TagSchema = mongoose.Schema({
@@ -6,9 +7,10 @@ const TagSchema = mongoose.Schema({
 });
 
 const TaskSchema = new Schema({
-  userId: {
-    type: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
     required: [true, "User Id is required!"],
+    ref: User,
     select: false,
   },
   title: {
