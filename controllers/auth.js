@@ -76,7 +76,7 @@ const sendToken = (user, statusCode, res, req) => {
   const userWithoutPassword = {
     email: user.email,
     fullName: user.fullName,
-    userName: user.userName,
+    displayImage: user.displayImage,
     _id: user._id,
   };
 
