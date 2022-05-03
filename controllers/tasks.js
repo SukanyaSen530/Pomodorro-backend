@@ -65,6 +65,29 @@ export const updateTask = async (req, res) => {
   }
 };
 
+export const toggleCompletionTask = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id))
+    res
+      .status(404)
+      .send({ success: false, message: `No task found with id: ${id}` });
+
+  const taskData = await Task.find({ _id: id });
+
+  try {
+    await Task.findByIdAndUpdate(id, {
+      ...taskData,
+      isDone: !taskData.isDone,
+    });
+
+    res.status(200).json({ success: true, id: id });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, message: e.message });
+  }
+};
+
 export const deleteTask = async (req, res) => {
   const { id } = req.params;
 
