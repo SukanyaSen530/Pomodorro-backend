@@ -11,7 +11,7 @@ import {
 const taskRoutes = express.Router();
 
 taskRoutes.get("/", getAllTasks);
-taskRoutes.put("/:id", getATask);
+taskRoutes.get("/:id", getATask);
 taskRoutes.post("/", createTask);
 taskRoutes.put("/:id", updateTask);
 taskRoutes.patch("/:id", toggleCompletionTask);
