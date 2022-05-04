@@ -14,7 +14,7 @@ taskRoutes.get("/", getAllTasks);
 taskRoutes.get("/:id", getATask);
 taskRoutes.post("/", createTask);
 taskRoutes.put("/:id", updateTask);
-taskRoutes.patch("/:id", toggleCompletionTask);
+taskRoutes.put("/completion/:id", toggleCompletionTask);
 taskRoutes.delete("/:id", deleteTask);
 
 export default taskRoutes;
