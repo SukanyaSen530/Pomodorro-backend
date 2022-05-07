@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 import User from "./User.js";
 const { Schema, model } = mongoose;
 
-const TagSchema = mongoose.Schema({
-  name: String,
-});
-
 const TaskSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,10 +17,15 @@ const TaskSchema = new Schema({
     type: String,
     required: [true, "Task description is required"],
   },
-  tags: [TagSchema],
+  tags: [String],
   isDone: {
     type: Boolean,
     default: false,
+  },
+  priority: {
+    type: String,
+    enum: ["low", "medium", "high"],
+    default: "low",
   },
   workDuration: {
     type: Number,
