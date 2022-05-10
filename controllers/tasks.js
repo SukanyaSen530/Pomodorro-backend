@@ -69,19 +69,20 @@ export const toggleCompletionTask = async (req, res) => {
       .status(404)
       .send({ success: false, message: `No task found with id: ${id}` });
 
-  const taskData = await Task.find({ _id: id });
+  Task.findById(id, (err, task) => {
+    if (err)
+      return res.status(500).json({ success: false, message: e.message });
 
-  try {
-    await Task.findByIdAndUpdate(id, {
-      ...taskData,
-      isDone: !taskData.isDone,
+    task.isDone = !task.isDone;
+    task.save((err, updatedTask) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ success: false, message: e.message });
+      } else {
+        return res.status(200).json({ success: true, task: updatedTask });
+      }
     });
-
-    res.status(200).json({ success: true, id: id });
-  } catch (e) {
-    console.log(e);
-    res.status(500).json({ success: false, message: e.message });
-  }
+  });
 };
 
 export const updateTags = async (req, res) => {
@@ -129,4 +130,3 @@ export const deleteTask = async (req, res) => {
     res.status(500).json({ success: false, message: e.message });
   }
 };
-
