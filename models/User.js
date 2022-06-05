@@ -24,9 +24,6 @@ const UserSchema = new Schema(
       trim: true,
       select: false,
     },
-    displayImage: {
-      type: String,
-    },
   },
   {
     timestamps: true,
