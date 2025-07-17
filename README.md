@@ -1,113 +1,197 @@
-#### (Pomodorro-backend)
-Backend for pomodorro project.
+# ⏱️ Pomodorro Backend
 
-## Features -
-- Authentication using JWT token
-- User authentication
-- Task management
+Backend server for the **Pomodorro Productivity App**, enabling user authentication, task management, and secure access using JWT tokens.
 
-## Stack Used
-- Node JS
-- Express JS
-- Mongoose
-- Javascript
+---
 
-## Steps To Run locally
-- Clone or fork the project
-- `npm install`
-- `npm start` or
-- `npm server` for development mode - using nodemon
+## 🔧 Features
 
-## Env variables
-- PORT - 5000
-- MONGO_URL - (Mongo configuration of the cluster)
-- JWT_SECRET
+- ✅ JWT-based user authentication
+- ✅ User registration and login
+- ✅ Task management with CRUD operations
+- ✅ Tagging and task completion toggling
+- ✅ Built with Express.js, Mongoose, and Node.js
 
-## Base URL
-- Production - `vibes--frontend.vercel.app`
-- Local - `http://localhost:5000`
+---
 
-## Endpoints
-- All responses are made with Content-Type: application/json
+## 🧰 Tech Stack
 
-      (Public Routes)
+| Tool       | Purpose                         |
+| ---------- | ------------------------------- |
+| Node.js    | Runtime                         |
+| Express.js | Web server framework            |
+| MongoDB    | NoSQL Database                  |
+| Mongoose   | MongoDB ODM                     |
+| JWT        | Authentication                  |
+| bcrypt     | Password hashing                |
+| dotenv     | Environment variable management |
+| nodemon    | Dev-time auto-reloading server  |
 
-</br>
+---
 
-> ### Authentication
+## ⚙️ Getting Started
 
-1. #### `/auth/login` [POST]
+### 1. Clone the Repo
 
-- Description - logs in a user to the system
-- Requires - `[email: <string>, password: <string>]`
-- Returns - access token and user info on success, error message on failure.
+```bash
+git clone https://github.com/yourusername/pomodorro-backend.git
+cd pomodorro-backend
+```
 
-2. #### `/auth/signup` [POST]
+### 2. Install Dependencies
 
-- Description - registers a new user
-- Requires - `[fullName: <string>, email: <string> password: <string>]`
-- Returns - access token and user info on success, error message on failure.
+```bash
+npm install
+```
 
-        (Protected Routes)
+### 3. Add `.env` File
 
-### All protected routes require token in header -
-```javascript
-headers: {
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyN2JkZTU1N2Y4ZWRiNzM3MjQ4ZGM0YiIsImlhdCI6MTY1MjI4NTAxNCwiZXhwIjoxNjU0ODc3MDE0fQ.yIfgTISVW6c3yMPsRijLrSwXuM0vFhhW5jxY6VgyyYw'
+Create a `.env` file in the root directory:
+
+```env
+PORT=5000
+MONGO_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/pomodorro?retryWrites=true&w=majority
+JWT_SECRET=your_super_secret_key
+```
+
+> ⚠️ **Ensure the MongoDB password is URL-encoded if it contains special characters.**
+
+---
+
+## 🏁 Running the Server
+
+### Development (auto-restarts with changes)
+
+```bash
+npm run server
+```
+
+### Production
+
+```bash
+npm start
+```
+
+---
+
+## 🌐 Base URLs
+
+- **Frontend (Production):** [https://pomodorro-frontend.vercel.app](https://pomodorro-frontend.vercel.app)
+- **Backend (Local):** `http://localhost:5000`
+
+---
+
+## 🔑 API Endpoints
+
+All endpoints return `application/json`.
+
+### 📂 Public Routes
+
+#### `POST /auth/signup`
+
+Registers a new user  
+**Body:**
+
+```json
+{
+  "fullName": "Jane Doe",
+  "email": "jane@example.com",
+  "password": "secure123"
 }
 ```
-<br/>
 
-> ### User
+#### `POST /auth/login`
 
-1. #### `/auth/user` [GET]
+Logs in an existing user  
+**Body:**
 
-- Description - get user details
-- Requires - NA
-- Returns - user info on success, error message on failure.
+```json
+{
+  "email": "jane@example.com",
+  "password": "secure123"
+}
+```
 
-<br/>
+---
 
-> ### Task
+### 🔐 Protected Routes
 
-1. #### `/tasks` [GET]
+> Requires `Authorization: Bearer <token>` header.
 
-- Description - get all tasks of logged in user
-- Requires - NA
-- Returns - array of task object on success, error message on failure.
+#### `GET /auth/user`
 
-2. #### `/tasks/:taskId` [GET]
+Returns the authenticated user's profile.
 
-- Description - get task details
-- Requires - NA
-- Returns - single task object on success, error message on failure.
+#### `GET /tasks`
 
-3. #### `/tasks` [POST]
+Returns all tasks for the logged-in user.
 
-- Description - add task to task model
-- Requires - `[title: <string>, description: <string>, priority: <string>, workDuration: <number>, shortBreakDuration: <string>, longBreakDuration: <string>]`
-- Returns - newly added task on success, error message on failure.
+#### `GET /tasks/:taskId`
 
-4. #### `/tasks` [PUT]
+Returns details for a specific task.
 
-- Description - update a task 
-- Requires - `[title: <string>, description: <string>, priority: <string>, workDuration: <number>, shortBreakDuration: <string>, longBreakDuration: <string>]`
-- Returns - updated task on success, error message on failure.
+#### `POST /tasks`
 
-5. #### `/tasks/completion/:taskId` [PUT]
+Creates a new task  
+**Body:**
 
-- Description - change completion status of task id
-- Requires - NA
-- Returns - updated task on success, error message on failure.
+```json
+{
+  "title": "Focus Session",
+  "description": "Work on backend logic",
+  "priority": "high",
+  "workDuration": 25,
+  "shortBreakDuration": "5",
+  "longBreakDuration": "15"
+}
+```
 
-6. #### `/tasks/tags/:taskId` [POST]
+#### `PUT /tasks`
 
-- Description - add tags to a task 
-- Requires - `[tags: <array>]`
-- Returns - updated task on success, error message on failure.
+Updates an existing task (same format as above)
 
-7. #### `/tasks/:taskId` [DELETE]
+#### `PUT /tasks/completion/:taskId`
 
-- Description - delete a task 
-- Requires - NA
-- Returns - deleted task id on success, error message on failure.
+Toggles the task's completion status.
+
+#### `POST /tasks/tags/:taskId`
+
+Adds tags to a task  
+**Body:**
+
+```json
+{
+  "tags": ["urgent", "frontend"]
+}
+```
+
+#### `DELETE /tasks/:taskId`
+
+Deletes a task by ID.
+
+---
+
+## 📁 Folder Structure
+
+```bash
+pomodorro-backend/
+├── controllers/
+├── models/
+├── routes/
+├── middleware/
+├── index.js
+├── .env
+└── package.json
+```
+
+---
+
+## 📝 License
+
+This project is licensed under the [ISC License](LICENSE).
+
+---
+
+## 👩‍💻 Author
+
+**Sukanya Sen** 💼 [LinkedIn](https://linkedin.com/in/your-profile)
