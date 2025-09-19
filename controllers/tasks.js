@@ -62,27 +62,30 @@ export const updateTask = async (req, res) => {
 };
 
 export const toggleCompletionTask = async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id))
-    res
-      .status(404)
-      .send({ success: false, message: `No task found with id: ${id}` });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res
+        .status(404)
+        .json({ success: false, message: `No task found with id: ${id}` });
+    }
 
-  Task.findById(id, (err, task) => {
-    if (err)
-      return res.status(500).json({ success: false, message: e.message });
+    const task = await Task.findById(id);
+    if (!task) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Task not found" });
+    }
 
     task.isDone = !task.isDone;
-    task.save((err, updatedTask) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ success: false, message: e.message });
-      } else {
-        return res.status(200).json({ success: true, task: updatedTask });
-      }
-    });
-  });
+    const updatedTask = await task.save();
+
+    return res.status(200).json({ success: true, task: updatedTask });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: err.message });
+  }
 };
 
 export const updateTags = async (req, res) => {
