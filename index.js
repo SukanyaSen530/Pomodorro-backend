@@ -27,12 +27,10 @@ app.use("/tasks", protectedRoutes, taskRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, (err) => {
-  const port = server.address().port;
-  if (err) console.log("Error in server setup");
-  console.log(`Server running on ${port}`);
-});
+// const server = app.listen(PORT, (err) => {
+//   const port = server.address().port;
+//   if (err) console.log("Error in server setup");
+//   console.log(`Server running on ${port}`);
+// });
 
-export default async function handler(req, res) {
-  return app(req, res);
-}
+export default app;
