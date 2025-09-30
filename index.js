@@ -25,8 +25,7 @@ app.get("/", (req, res) => res.send("Pomodoro Backend!"));
 app.use("/auth", authRoutes);
 app.use("/tasks", protectedRoutes, taskRoutes);
 
-const PORT = process.env.PORT || 5000;
-
+// const PORT = process.env.PORT || 5000;
 // const server = app.listen(PORT, (err) => {
 //   const port = server.address().port;
 //   if (err) console.log("Error in server setup");
