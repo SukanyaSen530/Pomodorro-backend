@@ -1,36 +1,33 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 
-dotenv.config();
+let cached = global.mongoose;
 
-let connectionPromise = null;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
-const connectDB = async () => {
-  if (mongoose.connection.readyState === 1) {
-    return mongoose.connection;
+async function connectDB() {
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  if (connectionPromise) {
-    return connectionPromise;
-  }
-
-  connectionPromise = mongoose
-    .connect(process.env.MONGO_URL, {
+  if (!cached.promise) {
+    const opts = {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       maxPoolSize: 10,
-    })
-    .then((conn) => {
-      console.log(`MongoDB connected: ${conn.connection.host}`);
-      return conn.connection;
-    })
-    .catch((error) => {
-      console.error(`MongoDB error: ${error.message}`);
-      connectionPromise = null;
-      throw error;
-    });
+    };
 
-  return connectionPromise;
-};
+    cached.promise = mongoose
+      .connect(process.env.MONGO_URL, opts)
+      .then((mongoose) => {
+        console.log("✅ MongoDB connected:", mongoose.connection.host);
+        return mongoose;
+      });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
 
 export default connectDB;
