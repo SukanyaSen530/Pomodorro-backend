@@ -3,20 +3,34 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const { connect } = mongoose;
+let connectionPromise = null;
 
 const connectDB = async () => {
-  try {
-    const conn = await connect(process.env.MONGO_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (connectionPromise) {
+    return connectionPromise;
+  }
+
+  connectionPromise = mongoose
+    .connect(process.env.MONGO_URL, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10,
+    })
+    .then((conn) => {
+      console.log(`MongoDB connected: ${conn.connection.host}`);
+      return conn.connection;
+    })
+    .catch((error) => {
+      console.error(`MongoDB error: ${error.message}`);
+      connectionPromise = null;
+      throw error;
     });
 
-    console.log(`Mongo DB connected ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`Error: ${error} `);
-    process.exit(1);
-  }
+  return connectionPromise;
 };
 
 export default connectDB;
